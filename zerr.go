@@ -30,3 +30,10 @@ func Wrap(err error, msg ...string) error {
 
 	return fmt.Errorf(format.String(), err)
 }
+
+// Errorf formats according to a format specifier and returns an error with a stack trace at the point Errorf is called.
+func Errorf(formats string, a ...interface{}) error {
+	pc, file, line, _ := runtime.Caller(1)
+	name := runtime.FuncForPC(pc).Name()
+	return fmt.Errorf(file[strings.LastIndex(file, "/")+1:]+"/"+name[strings.LastIndex(name, "/")+1:]+"():"+strconv.Itoa(line)+": "+formats, a...)
+}
